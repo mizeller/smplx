@@ -38,6 +38,8 @@ from .utils import (
     FLAMEOutput,
     find_joint_kin_chain)
 from .vertex_joint_selector import VertexJointSelector
+from .lbs import vertices2joints
+
 from collections import namedtuple
 
 TensorOutput = namedtuple('TensorOutput',
@@ -295,6 +297,17 @@ class SMPL(nn.Module):
 
     def get_num_faces(self) -> int:
         return self.faces.shape[0]
+
+    def get_T_hip(self, betas=None, displacement=None):
+        if displacement is not None:
+            v_shaped = (
+                self.v_template + displacement + blend_shapes(betas, self.shapedirs)
+            )
+        else:
+            v_shaped = self.v_template + blend_shapes(betas, self.shapedirs)
+        J = vertices2joints(self.J_regressor, v_shaped)
+        T_hip = J[0, 0]
+        return T_hip
 
     def extra_repr(self) -> str:
         msg = [
