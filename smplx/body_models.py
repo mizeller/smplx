@@ -1602,6 +1602,9 @@ class MANO(SMPL):
             model_path=model_path, data_struct=data_struct,
             batch_size=batch_size, vertex_ids=vertex_ids,
             use_compressed=use_compressed, dtype=dtype, ext=ext, **kwargs)
+        
+        if not is_rhand:
+            self.shapedirs[:, 0, :] *= -1
 
         # add only MANO tips to the extra joints
         self.vertex_joint_selector.extra_joints_idxs = to_tensor(
