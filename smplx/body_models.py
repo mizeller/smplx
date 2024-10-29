@@ -1703,7 +1703,7 @@ class MANO(SMPL):
         full_pose = torch.cat([global_orient, hand_pose], dim=1)
         full_pose += self.pose_mean
 
-        vertices, joints = lbs(betas, full_pose, self.v_template,
+        vertices, joints, T_weighted, W, T = lbs(betas, full_pose, self.v_template,
                                self.shapedirs, self.posedirs,
                                self.J_regressor, self.parents,
                                self.lbs_weights, pose2rot=True,
@@ -1724,7 +1724,11 @@ class MANO(SMPL):
                             betas=betas,
                             global_orient=global_orient,
                             hand_pose=hand_pose,
-                            full_pose=full_pose if return_full_pose else None)
+                            full_pose=full_pose if return_full_pose else None,
+                            T=T,
+                            T_weighted=T_weighted,
+                            weights=W
+                           )
 
         return output
 
