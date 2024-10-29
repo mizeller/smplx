@@ -77,6 +77,9 @@ class SMPLXOutput(SMPLHOutput):
 class MANOOutput(ModelOutput):
     betas: Optional[Tensor] = None
     hand_pose: Optional[Tensor] = None
+    T: Optional[Tensor] = None
+    T_weighted: Optional[Tensor] = None
+    weights: Optional[Tensor] = None
 
 
 @dataclass
